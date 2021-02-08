@@ -1,4 +1,10 @@
 ---
+ - name: Install iptables
+   apt:
+     name: iptables
+     state: present
+     update_cache: true
+
  - name: Track input chain
    iptables:
      chain: INPUT
@@ -18,27 +24,7 @@
      chain: INPUT
      protocol: udp
      match: udp
-     destination_port: 51820
-     ctstate: NEW
-     jump: ACCEPT
-  
- - name: Allow recursive DNS tcp    
-   iptables:
-     chain: INPUT
-     source: 10.200.200.0/24
-     protocol: tcp
-     match: tcp
-     destination_port: 53
-     ctstate: NEW
-     jump: ACCEPT
- 
- - name: Allow recursive DNS udp  
-   iptables:
-     chain: INPUT
-     source: 10.200.200.0/24
-     protocol: udp
-     match: udp
-     destination_port: 53
+     destination_port: "{{ wg_port }}"
      ctstate: NEW
      jump: ACCEPT
    
@@ -51,25 +37,19 @@
      ctstate: NEW
      jump: ACCEPT
 
- - name: Set up NAT
-   iptables:
-     table: nat
-     chain: POSTROUTING
-     source: 10.200.200.0/24
-     out_interface: eth0
-     jump: MASQUERADE  
-
  - name: Set up vpn chain NAT 
    iptables:
      table: nat
      chain: POSTROUTING
-     source: 10.200.200.0/24
-     to_source: 10.100.100.2
+     source: "{{ client_net }}.0/24"
+     to_source: "{{ gate_net_middleman_ip }}"
      jump: SNAT
 
-
  - name: Install iptables-persistent
-   apt: pkg=iptables-persistent state=installed update_cache=true
+   apt:
+     name: iptables-persistent
+     state: present
+     update_cache: true
 
  - name: Set up iptables persistence
    command: netfilter-persistent save
