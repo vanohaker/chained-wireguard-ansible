@@ -37,6 +37,13 @@
      ctstate: NEW
      jump: ACCEPT
 
+ - name: Do not NAT ourselves
+   iptables:
+     table: nat
+     chain: POSTROUTING
+     source: "{{ client_net_middleman_ip }}"
+     jump: RETURN
+
  - name: Set up vpn chain NAT 
    iptables:
      table: nat
