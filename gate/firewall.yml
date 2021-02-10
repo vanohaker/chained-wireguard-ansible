@@ -12,14 +12,14 @@
      ctstate: ESTABLISHED,RELATED
      jump: ACCEPT
 
- - name: Track forward chain  
+ - name: Track forward chain
    iptables:
      chain: FORWARD
      match: conntrack
      ctstate: ESTABLISHED,RELATED
      jump: ACCEPT
 
- - name: Allow incoming wireguard connections    
+ - name: Allow incoming wireguard connections
    iptables:
      chain: INPUT
      protocol: udp
@@ -27,8 +27,8 @@
      destination_port: "{{ wg_port }}"
      ctstate: NEW
      jump: ACCEPT
-   
- - name: Allow forwarding of packets that stay in the tunnel 
+
+ - name: Allow forwarding of packets that stay in the tunnel
    iptables:
      chain: FORWARD
      in_interface: wg0
@@ -43,7 +43,7 @@
      chain: POSTROUTING
      source: "{{ gate_net }}.0/24"
      out_interface: "{{ interface }}"
-     jump: MASQUERADE  
+     jump: MASQUERADE
 
  - name: Install iptables-persistent
    apt:
