@@ -1,4 +1,5 @@
-# chained-wireguard-ansible
-Ansible scripts for the set up of a chained wireguard VPN connection
+# Chained (double) WireGuard VPN
 
-See https://www.ckn.io/blog/2017/12/28/wireguard-vpn-chained-setup/ for details.
+Ansible scripts to set up chained WireGuard VPN connection.
+
+Source and details: https://www.ckn.io/blog/2017/12/28/wireguard-vpn-chained-setup
