@@ -1,0 +1,60 @@
+---
+- name: Install iptables
+  apt:
+    name: iptables
+    state: present
+    update_cache: true
+
+- name: Track input chain
+  iptables:
+    chain: INPUT
+    match: conntrack
+    ctstate: ESTABLISHED,RELATED
+    jump: ACCEPT
+
+- name: Track forward chain
+  iptables:
+    chain: FORWARD
+    match: conntrack
+    ctstate: ESTABLISHED,RELATED
+    jump: ACCEPT
+
+- name: Allow incoming wireguard connections
+  iptables:
+    chain: INPUT
+    protocol: udp
+    match: udp
+    destination_port: "{{ wg_port }}"
+    ctstate: NEW
+    jump: ACCEPT
+
+- name: Allow forwarding of packets that stay in the tunnel
+  iptables:
+    chain: FORWARD
+    in_interface: wg0
+    match: conntrack
+    out_interface: wg0
+    ctstate: NEW
+    jump: ACCEPT
+
+- name: get local address
+  shell: 
+    cmd: "ip route | grep default | awk '{print $5}'"
+  register: gw_interface
+
+- name: Set up NAT
+  iptables:
+    table: nat
+    chain: POSTROUTING
+    source: "{{ gate_net }}.0/30"
+    out_interface: "{{ gw_interface.stdout_lines[0] | string }}"
+    jump: MASQUERADE
+
+- name: Install iptables-persistent
+  apt:
+    name: iptables-persistent
+    state: present
+    update_cache: true
+
+- name: Set up iptables persistence
+  command: netfilter-persistent save

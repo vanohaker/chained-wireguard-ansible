@@ -1,0 +1,4 @@
+---
+
+- name: wireguard setup
+  include: wireguard.yaml

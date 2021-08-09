@@ -1,0 +1,7 @@
+---
+- name: gate role
+  hosts: 
+    - gate
+  become: yes
+  roles:
+   - gate

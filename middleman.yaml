@@ -1,0 +1,7 @@
+---
+- name: middleman role
+  hosts: 
+    - middleman
+  become: yes
+  roles:
+   - middleman

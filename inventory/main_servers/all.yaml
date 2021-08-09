@@ -1,0 +1,17 @@
+all:
+  hosts:
+    252.20.97.83.ro.ovo.sc:
+      ansible_hosts: 83.97.20.252
+      ansible_port: 22
+      ansible_user: root
+    43.20.97.83.ro.ovo.sc:
+      ansible_hosts: 83.97.20.43
+      ansible_port: 22
+      ansible_user: root
+  children:
+    gate:
+      hosts:
+        43.20.97.83.ro.ovo.sc:
+    middleman:
+      hosts:
+        252.20.97.83.ro.ovo.sc:

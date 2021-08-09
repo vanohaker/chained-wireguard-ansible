@@ -1,5 +1,5 @@
 [Interface]
-Address = {{ gate_net_middleman_ip }}/32
+Address = {{ gate_net_middleman_ip }}/30
 PrivateKey = {{ client_private_key }}
 PostUp = ip route add 0.0.0.0/0 dev gate0 table middleman
 PostUp = ip rule add to {{ client_net }}.0/24 table main

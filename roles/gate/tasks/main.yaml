@@ -1,0 +1,4 @@
+---
+- name: wireguars role
+  include: wireguard.yaml
+  

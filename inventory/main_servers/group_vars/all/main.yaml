@@ -1,0 +1,6 @@
+client_net: 10.30.0
+client_net_middleman_ip: "{{ client_net }}.1"
+gate_net: 10.40.0
+gate_net_middleman_ip: "{{ gate_net }}.2"
+gate_net_gate_ip: "{{ gate_net }}.1"
+wg_port: '51820'
